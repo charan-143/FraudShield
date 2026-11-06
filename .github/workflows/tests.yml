@@ -1,0 +1,25 @@
+name: Research engine checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements-lock.txt
+      - run: python -m pytest -q
+      - run: node --check web/app.js
+      - run: node --check web/assurance.js
+      - run: node --check web/policy.js
+# Dashboard data parity suites also require the generated web/benchmark.json.
+# Run node tests/test_dashboard.cjs and node tests/test_assurance_ui.cjs locally
+# after training or restoring the complete measured delivery.
