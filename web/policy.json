@@ -1,0 +1,146 @@
+{
+  "model": "Extra trees",
+  "dataset_sha256": "76274b691b16a6c49d3f159c883398e03ccd6d1ee12d9d8ee38f4b4b98551a89",
+  "run_id": "20261106T070211Z",
+  "policy": {
+    "threshold": 0.002390480566449357,
+    "calibration_recall": 0.8163265306122449,
+    "calibration_precision": 0.05044136191677175,
+    "calibration_alerts": 793,
+    "calibration_assumed_cost": 3279.0,
+    "min_calibration_recall": 0.8,
+    "assumptions": {
+      "eur_per_review": 3,
+      "eur_per_missed_fraud": 100
+    },
+    "selection": "Minimum empirical assumed cost subject to calibration recall floor; ties prefer fewer alerts. No test labels used."
+  },
+  "customer_balance": {
+    "selection_data": "calibration only",
+    "max_fpr": 0.005,
+    "rows": [
+      {
+        "recall_target": 0.7,
+        "threshold": 0.1806184320657938,
+        "recall": 0.7142857142857143,
+        "precision": 0.7446808510638298,
+        "tp": 35,
+        "fp": 12,
+        "alerts": 47,
+        "fpr": 0.00028230644364457617,
+        "legitimate_interruptions_per_10000": 2.8230644364457618,
+        "within_friction_cap": true
+      },
+      {
+        "recall_target": 0.8,
+        "threshold": 0.002390480566449357,
+        "recall": 0.8163265306122449,
+        "precision": 0.05044136191677175,
+        "tp": 40,
+        "fp": 753,
+        "alerts": 793,
+        "fpr": 0.017714729338697156,
+        "legitimate_interruptions_per_10000": 177.14729338697157,
+        "within_friction_cap": false
+      },
+      {
+        "recall_target": 0.85,
+        "threshold": 0.0016865312841334431,
+        "recall": 0.8571428571428571,
+        "precision": 0.03271028037383177,
+        "tp": 42,
+        "fp": 1242,
+        "alerts": 1284,
+        "fpr": 0.029218716917213637,
+        "legitimate_interruptions_per_10000": 292.18716917213635,
+        "within_friction_cap": false
+      },
+      {
+        "recall_target": 0.9,
+        "threshold": 0.0005293397216147784,
+        "recall": 0.9183673469387755,
+        "precision": 0.007968833008677173,
+        "tp": 45,
+        "fp": 5602,
+        "alerts": 5647,
+        "fpr": 0.1317900581080763,
+        "legitimate_interruptions_per_10000": 1317.9005810807632,
+        "within_friction_cap": false
+      },
+      {
+        "recall_target": 0.95,
+        "threshold": 0.00019597051303490748,
+        "recall": 0.9591836734693877,
+        "precision": 0.0033326242643409204,
+        "tp": 47,
+        "fp": 14056,
+        "alerts": 14103,
+        "fpr": 0.33067494765568023,
+        "legitimate_interruptions_per_10000": 3306.7494765568026,
+        "within_friction_cap": false
+      }
+    ],
+    "interpretation": "Each row minimizes flagged transactions at its recall floor, including complete score ties. All flagged legitimate transactions count as interruptions, including simulated step-up. Customer satisfaction and authentication outcomes are unmeasured.",
+    "research_target_recall": 0.8,
+    "status": "infeasible_on_calibration",
+    "target_test_diagnostic": {
+      "tp": 63,
+      "fp": 980,
+      "fn": 11,
+      "tn": 55690,
+      "alerts": 1043,
+      "precision": 0.06040268456375839,
+      "recall": 0.8513513513513513,
+      "fpr": 0.017293100405858478,
+      "alert_rate": 0.01838079796982941,
+      "captured_exposure": 5365.469999999999,
+      "missed_exposure": 2362.2000000000003
+    },
+    "promotion": "Not promoted. Previously inspected test is retrospective; new forward data and measured customer friction are required."
+  },
+  "baseline_test": {
+    "tp": 62,
+    "fp": 543,
+    "fn": 12,
+    "tn": 56127,
+    "alerts": 605,
+    "precision": 0.1024793388429752,
+    "recall": 0.8378378378378378,
+    "fpr": 0.009581789306511383,
+    "alert_rate": 0.01066192020301706,
+    "captured_exposure": 5357.47,
+    "missed_exposure": 2370.2000000000003
+  },
+  "candidate_test": {
+    "tp": 63,
+    "fp": 980,
+    "fn": 11,
+    "tn": 55690,
+    "alerts": 1043,
+    "precision": 0.06040268456375839,
+    "recall": 0.8513513513513513,
+    "fpr": 0.017293100405858478,
+    "alert_rate": 0.01838079796982941,
+    "captured_exposure": 5365.469999999999,
+    "missed_exposure": 2362.2000000000003
+  },
+  "false_positive_change": 437,
+  "fraud_captured_change": 1,
+  "tiers": {
+    "low_cutoff": 0.002390480566449357,
+    "high_cutoff": 0.0034456687360667235,
+    "counts": {
+      "low_risk": 55701,
+      "step_up_candidate": 438,
+      "analyst_review_candidate": 605
+    },
+    "meaning": "Simulated recommendations only. Step-up success, abandonment and fraud prevention are unmeasured. No authentication or payment action is integrated."
+  },
+  "limits": [
+    "The existing test has already been inspected in earlier development; this is a retrospective policy comparison, not new independent validation.",
+    "Recall floor applies to calibration, not a guarantee on future/test transactions.",
+    "Costs are explicit scenario assumptions, not observed losses or realized savings.",
+    "Threshold changes do not improve probability ranking or AP. No model retraining is claimed.",
+    "ULB lacks merchant/category/device/entity histories. Existing bank-data adapter can compute point-in-time context only when authorized data provides it."
+  ]
+}

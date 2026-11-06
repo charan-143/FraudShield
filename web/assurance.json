@@ -1,0 +1,2221 @@
+{
+  "schema_version": 1,
+  "dataset": {
+    "name": "Feedzai BAF Base",
+    "kind": "synthetic account-opening data; not real card/UPI transactions",
+    "rows": 1000000,
+    "frauds": 11029,
+    "months": 8,
+    "sha256": "7bf10a37ce07e72e14c1b09e5efee3d27261baff4facc7da767b0474dcf9b809",
+    "source": "https://www.kaggle.com/datasets/sgpjesus/bank-account-fraud-dataset-neurips-2022",
+    "license": "CC BY-NC-SA 4.0",
+    "release_version": 2,
+    "release_last_updated": "2023-11-29T11:32:12.037Z",
+    "attribution": "Sergio Jesus, Jose Pombal, Duarte Alves, Andre Cruz, Pedro Saleiro, Rita P. Ribeiro, Joao Gama, Pedro Bizarro; Feedzai BAF, NeurIPS 2022",
+    "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "protocol": {
+    "dataset_sha256": "7bf10a37ce07e72e14c1b09e5efee3d27261baff4facc7da767b0474dcf9b809",
+    "task": "account-opening-fraud",
+    "population": "BAF Base synthetic, derived from anonymized real data",
+    "deduplication": "none; duplicates rejected",
+    "split_fingerprint": "79d1b15502b9fece2a64d6c8d267e3cd09811e1cb9e713dc6e02279ae61e90d7",
+    "feature_manifest_sha256": "745268af9d5787aea7b2f0c40d547f317a805fb86c3e80ba4f86a0b50a4c6496",
+    "label_policy": "provided retrospective labels; actual delay unknown",
+    "metric_definition": "sklearn average_precision_score",
+    "search_budget": "3 predeclared estimators per month; no random hyperparameter search",
+    "seed_policy": "42"
+  },
+  "excluded_features": [
+    "fraud_bool",
+    "month",
+    "customer_age",
+    "device_fraud_count"
+  ],
+  "features": [
+    "income",
+    "name_email_similarity",
+    "prev_address_months_count",
+    "current_address_months_count",
+    "days_since_request",
+    "intended_balcon_amount",
+    "payment_type",
+    "zip_count_4w",
+    "velocity_6h",
+    "velocity_24h",
+    "velocity_4w",
+    "bank_branch_count_8w",
+    "date_of_birth_distinct_emails_4w",
+    "employment_status",
+    "credit_risk_score",
+    "email_is_free",
+    "housing_status",
+    "phone_home_valid",
+    "phone_mobile_valid",
+    "bank_months_count",
+    "has_other_cards",
+    "proposed_credit_limit",
+    "foreign_request",
+    "source",
+    "session_length_in_minutes",
+    "device_os",
+    "keep_alive_session",
+    "device_distinct_emails_8w"
+  ],
+  "folds": [
+    {
+      "test_month": 5,
+      "split": {
+        "train": {
+          "months": [
+            0,
+            1,
+            2
+          ],
+          "rows": 397039,
+          "frauds": 3896
+        },
+        "tune": {
+          "months": [
+            3
+          ],
+          "rows": 150936,
+          "frauds": 1392
+        },
+        "calibration": {
+          "months": [
+            4
+          ],
+          "rows": 127691,
+          "frauds": 1452
+        },
+        "test": {
+          "months": [
+            5
+          ],
+          "rows": 119323,
+          "frauds": 1411
+        }
+      },
+      "models": [
+        {
+          "name": "Logistic baseline",
+          "tune_ap": 0.12514965223518265,
+          "test_ap": 0.14776525520134143,
+          "roc_auc": 0.8756586913259291,
+          "brier": 0.010890961107630803,
+          "top_1pct": {
+            "k": 1194,
+            "precision": 0.24120603015075376,
+            "recall": 0.20411055988660523
+          },
+          "top_5pct": {
+            "k": 5967,
+            "precision": 0.11044075749958103,
+            "recall": 0.4670446491849752
+          },
+          "threshold": 0.05090296325775139,
+          "operating": {
+            "tp": 502,
+            "fp": 2663,
+            "fn": 909,
+            "tn": 115249,
+            "alerts": 3165,
+            "precision": 0.15860979462875197,
+            "recall": 0.3557760453579022,
+            "fpr": 0.022584639392089014,
+            "alert_rate": 0.026524643195360492
+          },
+          "training_seconds": 3.968846100004157,
+          "estimator_spec": {
+            "class": "sklearn.pipeline.Pipeline",
+            "parameters": {
+              "memory": null,
+              "steps": [
+                [
+                  "columntransformer",
+                  {
+                    "class": "sklearn.compose._column_transformer.ColumnTransformer",
+                    "parameters": {
+                      "n_jobs": null,
+                      "remainder": "drop",
+                      "sparse_threshold": 1.0,
+                      "transformer_weights": null,
+                      "transformers": [
+                        [
+                          "numeric",
+                          {
+                            "class": "sklearn.preprocessing._data.StandardScaler",
+                            "parameters": {
+                              "copy": true,
+                              "with_mean": true,
+                              "with_std": true
+                            }
+                          },
+                          [
+                            "income",
+                            "name_email_similarity",
+                            "prev_address_months_count",
+                            "current_address_months_count",
+                            "days_since_request",
+                            "intended_balcon_amount",
+                            "zip_count_4w",
+                            "velocity_6h",
+                            "velocity_24h",
+                            "velocity_4w",
+                            "bank_branch_count_8w",
+                            "date_of_birth_distinct_emails_4w",
+                            "credit_risk_score",
+                            "email_is_free",
+                            "phone_home_valid",
+                            "phone_mobile_valid",
+                            "bank_months_count",
+                            "has_other_cards",
+                            "proposed_credit_limit",
+                            "foreign_request",
+                            "session_length_in_minutes",
+                            "keep_alive_session",
+                            "device_distinct_emails_8w"
+                          ]
+                        ],
+                        [
+                          "categorical",
+                          {
+                            "class": "sklearn.preprocessing._encoders.OneHotEncoder",
+                            "parameters": {
+                              "categories": "auto",
+                              "drop": null,
+                              "dtype": "<class 'numpy.float64'>",
+                              "feature_name_combiner": "concat",
+                              "handle_unknown": "ignore",
+                              "max_categories": null,
+                              "min_frequency": null,
+                              "sparse_output": true
+                            }
+                          },
+                          [
+                            "payment_type",
+                            "employment_status",
+                            "housing_status",
+                            "source",
+                            "device_os"
+                          ]
+                        ]
+                      ],
+                      "verbose": false,
+                      "verbose_feature_names_out": true
+                    }
+                  }
+                ],
+                [
+                  "logisticregression",
+                  {
+                    "class": "sklearn.linear_model._logistic.LogisticRegression",
+                    "parameters": {
+                      "C": 1,
+                      "class_weight": "balanced",
+                      "dual": false,
+                      "fit_intercept": true,
+                      "intercept_scaling": 1,
+                      "l1_ratio": 0.0,
+                      "max_iter": 600,
+                      "n_jobs": null,
+                      "penalty": "deprecated",
+                      "random_state": 42,
+                      "solver": "lbfgs",
+                      "tol": 0.0001,
+                      "verbose": 0,
+                      "warm_start": false
+                    }
+                  }
+                ]
+              ],
+              "transform_input": null,
+              "verbose": false
+            }
+          }
+        },
+        {
+          "name": "LightGBM",
+          "tune_ap": 0.152032145050563,
+          "test_ap": 0.18363946165644585,
+          "roc_auc": 0.8947788075230485,
+          "brier": 0.010602131046367902,
+          "top_1pct": {
+            "k": 1194,
+            "precision": 0.2805695142378559,
+            "recall": 0.23742026931254429
+          },
+          "top_5pct": {
+            "k": 5967,
+            "precision": 0.12133400368694486,
+            "recall": 0.513111268603827
+          },
+          "threshold": 0.04623346895932745,
+          "operating": {
+            "tp": 602,
+            "fp": 3188,
+            "fn": 809,
+            "tn": 114724,
+            "alerts": 3790,
+            "precision": 0.15883905013192612,
+            "recall": 0.42664776754075123,
+            "fpr": 0.027037112422823802,
+            "alert_rate": 0.031762526922722356
+          },
+          "training_seconds": 5.261995099979686,
+          "estimator_spec": {
+            "class": "lightgbm.sklearn.LGBMClassifier",
+            "parameters": {
+              "boosting_type": "gbdt",
+              "class_weight": null,
+              "colsample_bytree": 1.0,
+              "importance_type": "split",
+              "learning_rate": 0.05,
+              "max_depth": -1,
+              "min_child_samples": 80,
+              "min_child_weight": 0.001,
+              "min_split_gain": 0.0,
+              "n_estimators": 250,
+              "n_jobs": 4,
+              "num_leaves": 15,
+              "objective": null,
+              "random_state": 42,
+              "reg_alpha": 0.0,
+              "reg_lambda": 3,
+              "subsample": 1.0,
+              "subsample_for_bin": 200000,
+              "subsample_freq": 0,
+              "verbosity": -1
+            }
+          }
+        },
+        {
+          "name": "LightGBM weighted",
+          "tune_ap": 0.15356118392380427,
+          "test_ap": 0.1879443272881079,
+          "roc_auc": 0.8936049931217549,
+          "brier": 0.010612267864927622,
+          "top_1pct": {
+            "k": 1194,
+            "precision": 0.2830820770519263,
+            "recall": 0.23954642097802978
+          },
+          "top_5pct": {
+            "k": 5967,
+            "precision": 0.12016088486676722,
+            "recall": 0.5081502480510276
+          },
+          "threshold": 0.05634735614560087,
+          "operating": {
+            "tp": 602,
+            "fp": 3257,
+            "fn": 809,
+            "tn": 114655,
+            "alerts": 3859,
+            "precision": 0.1559989634620368,
+            "recall": 0.42664776754075123,
+            "fpr": 0.027622294592577517,
+            "alert_rate": 0.03234078928622311
+          },
+          "training_seconds": 6.363692099985201,
+          "estimator_spec": {
+            "class": "lightgbm.sklearn.LGBMClassifier",
+            "parameters": {
+              "boosting_type": "gbdt",
+              "class_weight": "balanced",
+              "colsample_bytree": 1.0,
+              "importance_type": "split",
+              "learning_rate": 0.05,
+              "max_depth": -1,
+              "min_child_samples": 80,
+              "min_child_weight": 0.001,
+              "min_split_gain": 0.0,
+              "n_estimators": 250,
+              "n_jobs": 4,
+              "num_leaves": 15,
+              "objective": null,
+              "random_state": 42,
+              "reg_alpha": 0.0,
+              "reg_lambda": 3,
+              "subsample": 1.0,
+              "subsample_for_bin": 200000,
+              "subsample_freq": 0,
+              "verbosity": -1
+            }
+          }
+        }
+      ],
+      "champion": "LightGBM weighted",
+      "selection": "earlier tune-period AP only",
+      "age_audit": {
+        "groups": [
+          {
+            "group": "age 50+",
+            "n": 20725,
+            "frauds": 470,
+            "legitimate": 20255,
+            "alerts": 1348,
+            "tp": 254,
+            "fp": 1094,
+            "recall": 0.5404255319148936,
+            "fpr": 0.0540113552209331,
+            "recall_ci95": [
+              0.49522439524767226,
+              0.5849712045518369
+            ],
+            "fpr_ci95": [
+              0.05098215315906603,
+              0.057209693017131115
+            ],
+            "sufficient_class_counts": true
+          },
+          {
+            "group": "age under 50",
+            "n": 98598,
+            "frauds": 941,
+            "legitimate": 97657,
+            "alerts": 2511,
+            "tp": 348,
+            "fp": 2163,
+            "recall": 0.3698193411264612,
+            "fpr": 0.0221489498960648,
+            "recall_ci95": [
+              0.339562130527542,
+              0.4011351073923547
+            ],
+            "fpr_ci95": [
+              0.021244556603920186,
+              0.023090935433043257
+            ],
+            "sufficient_class_counts": true
+          }
+        ],
+        "min_class_count": 30,
+        "recall_gap": 0.17060619078843242,
+        "fpr_gap": 0.0318624053248683,
+        "interpretation": "Descriptive group error rates, not a fairness pass/fail decision. Wilson intervals assume independent records; dependence and label bias can invalidate that assumption. Small groups are retained but excluded from gap summaries."
+      },
+      "ap_uncertainty": {
+        "ci95": null,
+        "clusters": 1,
+        "valid_resamples": 0,
+        "status": "insufficient independent clusters; no interval reported"
+      }
+    },
+    {
+      "test_month": 6,
+      "split": {
+        "train": {
+          "months": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "rows": 547975,
+          "frauds": 5288
+        },
+        "tune": {
+          "months": [
+            4
+          ],
+          "rows": 127691,
+          "frauds": 1452
+        },
+        "calibration": {
+          "months": [
+            5
+          ],
+          "rows": 119323,
+          "frauds": 1411
+        },
+        "test": {
+          "months": [
+            6
+          ],
+          "rows": 108168,
+          "frauds": 1450
+        }
+      },
+      "models": [
+        {
+          "name": "Logistic baseline",
+          "tune_ap": 0.1359224736990016,
+          "test_ap": 0.1407224424272932,
+          "roc_auc": 0.8717992763396408,
+          "brier": 0.012270785350706123,
+          "top_1pct": {
+            "k": 1082,
+            "precision": 0.2365988909426987,
+            "recall": 0.17655172413793102
+          },
+          "top_5pct": {
+            "k": 5409,
+            "precision": 0.12127934923276021,
+            "recall": 0.45241379310344826
+          },
+          "threshold": 0.04930984448746926,
+          "operating": {
+            "tp": 716,
+            "fp": 5695,
+            "fn": 734,
+            "tn": 101023,
+            "alerts": 6411,
+            "precision": 0.11168304476680704,
+            "recall": 0.49379310344827587,
+            "fpr": 0.05336494312112296,
+            "alert_rate": 0.059268915021078325
+          },
+          "training_seconds": 5.144552999990992,
+          "estimator_spec": {
+            "class": "sklearn.pipeline.Pipeline",
+            "parameters": {
+              "memory": null,
+              "steps": [
+                [
+                  "columntransformer",
+                  {
+                    "class": "sklearn.compose._column_transformer.ColumnTransformer",
+                    "parameters": {
+                      "n_jobs": null,
+                      "remainder": "drop",
+                      "sparse_threshold": 1.0,
+                      "transformer_weights": null,
+                      "transformers": [
+                        [
+                          "numeric",
+                          {
+                            "class": "sklearn.preprocessing._data.StandardScaler",
+                            "parameters": {
+                              "copy": true,
+                              "with_mean": true,
+                              "with_std": true
+                            }
+                          },
+                          [
+                            "income",
+                            "name_email_similarity",
+                            "prev_address_months_count",
+                            "current_address_months_count",
+                            "days_since_request",
+                            "intended_balcon_amount",
+                            "zip_count_4w",
+                            "velocity_6h",
+                            "velocity_24h",
+                            "velocity_4w",
+                            "bank_branch_count_8w",
+                            "date_of_birth_distinct_emails_4w",
+                            "credit_risk_score",
+                            "email_is_free",
+                            "phone_home_valid",
+                            "phone_mobile_valid",
+                            "bank_months_count",
+                            "has_other_cards",
+                            "proposed_credit_limit",
+                            "foreign_request",
+                            "session_length_in_minutes",
+                            "keep_alive_session",
+                            "device_distinct_emails_8w"
+                          ]
+                        ],
+                        [
+                          "categorical",
+                          {
+                            "class": "sklearn.preprocessing._encoders.OneHotEncoder",
+                            "parameters": {
+                              "categories": "auto",
+                              "drop": null,
+                              "dtype": "<class 'numpy.float64'>",
+                              "feature_name_combiner": "concat",
+                              "handle_unknown": "ignore",
+                              "max_categories": null,
+                              "min_frequency": null,
+                              "sparse_output": true
+                            }
+                          },
+                          [
+                            "payment_type",
+                            "employment_status",
+                            "housing_status",
+                            "source",
+                            "device_os"
+                          ]
+                        ]
+                      ],
+                      "verbose": false,
+                      "verbose_feature_names_out": true
+                    }
+                  }
+                ],
+                [
+                  "logisticregression",
+                  {
+                    "class": "sklearn.linear_model._logistic.LogisticRegression",
+                    "parameters": {
+                      "C": 1,
+                      "class_weight": "balanced",
+                      "dual": false,
+                      "fit_intercept": true,
+                      "intercept_scaling": 1,
+                      "l1_ratio": 0.0,
+                      "max_iter": 600,
+                      "n_jobs": null,
+                      "penalty": "deprecated",
+                      "random_state": 42,
+                      "solver": "lbfgs",
+                      "tol": 0.0001,
+                      "verbose": 0,
+                      "warm_start": false
+                    }
+                  }
+                ]
+              ],
+              "transform_input": null,
+              "verbose": false
+            }
+          }
+        },
+        {
+          "name": "LightGBM",
+          "tune_ap": 0.1818650600753364,
+          "test_ap": 0.17475590064975052,
+          "roc_auc": 0.8905912262482301,
+          "brier": 0.012103509775381627,
+          "top_1pct": {
+            "k": 1082,
+            "precision": 0.2707948243992606,
+            "recall": 0.20206896551724138
+          },
+          "top_5pct": {
+            "k": 5409,
+            "precision": 0.1323719726381956,
+            "recall": 0.49379310344827587
+          },
+          "threshold": 0.045022379049413544,
+          "operating": {
+            "tp": 777,
+            "fp": 6064,
+            "fn": 673,
+            "tn": 100654,
+            "alerts": 6841,
+            "precision": 0.11357988598158164,
+            "recall": 0.5358620689655172,
+            "fpr": 0.056822654097715475,
+            "alert_rate": 0.06324421270616079
+          },
+          "training_seconds": 10.517622999992454,
+          "estimator_spec": {
+            "class": "lightgbm.sklearn.LGBMClassifier",
+            "parameters": {
+              "boosting_type": "gbdt",
+              "class_weight": null,
+              "colsample_bytree": 1.0,
+              "importance_type": "split",
+              "learning_rate": 0.05,
+              "max_depth": -1,
+              "min_child_samples": 80,
+              "min_child_weight": 0.001,
+              "min_split_gain": 0.0,
+              "n_estimators": 250,
+              "n_jobs": 4,
+              "num_leaves": 15,
+              "objective": null,
+              "random_state": 42,
+              "reg_alpha": 0.0,
+              "reg_lambda": 3,
+              "subsample": 1.0,
+              "subsample_for_bin": 200000,
+              "subsample_freq": 0,
+              "verbosity": -1
+            }
+          }
+        },
+        {
+          "name": "LightGBM weighted",
+          "tune_ap": 0.17611841378704143,
+          "test_ap": 0.1797763545573206,
+          "roc_auc": 0.8902966826525078,
+          "brier": 0.011948479970769374,
+          "top_1pct": {
+            "k": 1082,
+            "precision": 0.2809611829944547,
+            "recall": 0.2096551724137931
+          },
+          "top_5pct": {
+            "k": 5409,
+            "precision": 0.13311148086522462,
+            "recall": 0.496551724137931
+          },
+          "threshold": 0.05535478758222682,
+          "operating": {
+            "tp": 771,
+            "fp": 5579,
+            "fn": 679,
+            "tn": 101139,
+            "alerts": 6350,
+            "precision": 0.12141732283464567,
+            "recall": 0.5317241379310345,
+            "fpr": 0.052277966228752415,
+            "alert_rate": 0.05870497744249686
+          },
+          "training_seconds": 9.626352999999654,
+          "estimator_spec": {
+            "class": "lightgbm.sklearn.LGBMClassifier",
+            "parameters": {
+              "boosting_type": "gbdt",
+              "class_weight": "balanced",
+              "colsample_bytree": 1.0,
+              "importance_type": "split",
+              "learning_rate": 0.05,
+              "max_depth": -1,
+              "min_child_samples": 80,
+              "min_child_weight": 0.001,
+              "min_split_gain": 0.0,
+              "n_estimators": 250,
+              "n_jobs": 4,
+              "num_leaves": 15,
+              "objective": null,
+              "random_state": 42,
+              "reg_alpha": 0.0,
+              "reg_lambda": 3,
+              "subsample": 1.0,
+              "subsample_for_bin": 200000,
+              "subsample_freq": 0,
+              "verbosity": -1
+            }
+          }
+        }
+      ],
+      "champion": "LightGBM",
+      "selection": "earlier tune-period AP only",
+      "age_audit": {
+        "groups": [
+          {
+            "group": "age 50+",
+            "n": 21112,
+            "frauds": 571,
+            "legitimate": 20541,
+            "alerts": 2513,
+            "tp": 358,
+            "fp": 2155,
+            "recall": 0.626970227670753,
+            "fpr": 0.10491212696558103,
+            "recall_ci95": [
+              0.5865787635818639,
+              0.6656646989851406
+            ],
+            "fpr_ci95": [
+              0.10079507550624964,
+              0.10917692488456351
+            ],
+            "sufficient_class_counts": true
+          },
+          {
+            "group": "age under 50",
+            "n": 87056,
+            "frauds": 879,
+            "legitimate": 86177,
+            "alerts": 4328,
+            "tp": 419,
+            "fp": 3909,
+            "recall": 0.47667804323094426,
+            "fpr": 0.04536013089339383,
+            "recall_ci95": [
+              0.44383328383793685,
+              0.5097257616844969
+            ],
+            "fpr_ci95": [
+              0.04399093680493073,
+              0.0467698555755679
+            ],
+            "sufficient_class_counts": true
+          }
+        ],
+        "min_class_count": 30,
+        "recall_gap": 0.1502921844398088,
+        "fpr_gap": 0.0595519960721872,
+        "interpretation": "Descriptive group error rates, not a fairness pass/fail decision. Wilson intervals assume independent records; dependence and label bias can invalidate that assumption. Small groups are retained but excluded from gap summaries."
+      },
+      "ap_uncertainty": {
+        "ci95": null,
+        "clusters": 1,
+        "valid_resamples": 0,
+        "status": "insufficient independent clusters; no interval reported"
+      }
+    },
+    {
+      "test_month": 7,
+      "split": {
+        "train": {
+          "months": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "rows": 675666,
+          "frauds": 6740
+        },
+        "tune": {
+          "months": [
+            5
+          ],
+          "rows": 119323,
+          "frauds": 1411
+        },
+        "calibration": {
+          "months": [
+            6
+          ],
+          "rows": 108168,
+          "frauds": 1450
+        },
+        "test": {
+          "months": [
+            7
+          ],
+          "rows": 96843,
+          "frauds": 1428
+        }
+      },
+      "models": [
+        {
+          "name": "Logistic baseline",
+          "tune_ap": 0.14938543815931404,
+          "test_ap": 0.16869408832199934,
+          "roc_auc": 0.8798096726506983,
+          "brier": 0.013404752943778006,
+          "top_1pct": {
+            "k": 969,
+            "precision": 0.26625386996904027,
+            "recall": 0.18067226890756302
+          },
+          "top_5pct": {
+            "k": 4843,
+            "precision": 0.14185422258930416,
+            "recall": 0.4810924369747899
+          },
+          "threshold": 0.05640633680571259,
+          "operating": {
+            "tp": 551,
+            "fp": 2557,
+            "fn": 877,
+            "tn": 92858,
+            "alerts": 3108,
+            "precision": 0.17728442728442728,
+            "recall": 0.3858543417366947,
+            "fpr": 0.026798721375045853,
+            "alert_rate": 0.03209318174777733
+          },
+          "training_seconds": 5.95246380000026,
+          "estimator_spec": {
+            "class": "sklearn.pipeline.Pipeline",
+            "parameters": {
+              "memory": null,
+              "steps": [
+                [
+                  "columntransformer",
+                  {
+                    "class": "sklearn.compose._column_transformer.ColumnTransformer",
+                    "parameters": {
+                      "n_jobs": null,
+                      "remainder": "drop",
+                      "sparse_threshold": 1.0,
+                      "transformer_weights": null,
+                      "transformers": [
+                        [
+                          "numeric",
+                          {
+                            "class": "sklearn.preprocessing._data.StandardScaler",
+                            "parameters": {
+                              "copy": true,
+                              "with_mean": true,
+                              "with_std": true
+                            }
+                          },
+                          [
+                            "income",
+                            "name_email_similarity",
+                            "prev_address_months_count",
+                            "current_address_months_count",
+                            "days_since_request",
+                            "intended_balcon_amount",
+                            "zip_count_4w",
+                            "velocity_6h",
+                            "velocity_24h",
+                            "velocity_4w",
+                            "bank_branch_count_8w",
+                            "date_of_birth_distinct_emails_4w",
+                            "credit_risk_score",
+                            "email_is_free",
+                            "phone_home_valid",
+                            "phone_mobile_valid",
+                            "bank_months_count",
+                            "has_other_cards",
+                            "proposed_credit_limit",
+                            "foreign_request",
+                            "session_length_in_minutes",
+                            "keep_alive_session",
+                            "device_distinct_emails_8w"
+                          ]
+                        ],
+                        [
+                          "categorical",
+                          {
+                            "class": "sklearn.preprocessing._encoders.OneHotEncoder",
+                            "parameters": {
+                              "categories": "auto",
+                              "drop": null,
+                              "dtype": "<class 'numpy.float64'>",
+                              "feature_name_combiner": "concat",
+                              "handle_unknown": "ignore",
+                              "max_categories": null,
+                              "min_frequency": null,
+                              "sparse_output": true
+                            }
+                          },
+                          [
+                            "payment_type",
+                            "employment_status",
+                            "housing_status",
+                            "source",
+                            "device_os"
+                          ]
+                        ]
+                      ],
+                      "verbose": false,
+                      "verbose_feature_names_out": true
+                    }
+                  }
+                ],
+                [
+                  "logisticregression",
+                  {
+                    "class": "sklearn.linear_model._logistic.LogisticRegression",
+                    "parameters": {
+                      "C": 1,
+                      "class_weight": "balanced",
+                      "dual": false,
+                      "fit_intercept": true,
+                      "intercept_scaling": 1,
+                      "l1_ratio": 0.0,
+                      "max_iter": 600,
+                      "n_jobs": null,
+                      "penalty": "deprecated",
+                      "random_state": 42,
+                      "solver": "lbfgs",
+                      "tol": 0.0001,
+                      "verbose": 0,
+                      "warm_start": false
+                    }
+                  }
+                ]
+              ],
+              "transform_input": null,
+              "verbose": false
+            }
+          }
+        },
+        {
+          "name": "LightGBM",
+          "tune_ap": 0.19401319910236497,
+          "test_ap": 0.217389280192632,
+          "roc_auc": 0.896300805078097,
+          "brier": 0.012860002798738812,
+          "top_1pct": {
+            "k": 969,
+            "precision": 0.3281733746130031,
+            "recall": 0.22268907563025211
+          },
+          "top_5pct": {
+            "k": 4843,
+            "precision": 0.16229609746025192,
+            "recall": 0.5504201680672269
+          },
+          "threshold": 0.05227791605217323,
+          "operating": {
+            "tp": 741,
+            "fp": 3466,
+            "fn": 687,
+            "tn": 91949,
+            "alerts": 4207,
+            "precision": 0.176135013073449,
+            "recall": 0.5189075630252101,
+            "fpr": 0.036325525336687106,
+            "alert_rate": 0.04344144646489679
+          },
+          "training_seconds": 15.349621700006537,
+          "estimator_spec": {
+            "class": "lightgbm.sklearn.LGBMClassifier",
+            "parameters": {
+              "boosting_type": "gbdt",
+              "class_weight": null,
+              "colsample_bytree": 1.0,
+              "importance_type": "split",
+              "learning_rate": 0.05,
+              "max_depth": -1,
+              "min_child_samples": 80,
+              "min_child_weight": 0.001,
+              "min_split_gain": 0.0,
+              "n_estimators": 250,
+              "n_jobs": 4,
+              "num_leaves": 15,
+              "objective": null,
+              "random_state": 42,
+              "reg_alpha": 0.0,
+              "reg_lambda": 3,
+              "subsample": 1.0,
+              "subsample_for_bin": 200000,
+              "subsample_freq": 0,
+              "verbosity": -1
+            }
+          }
+        },
+        {
+          "name": "LightGBM weighted",
+          "tune_ap": 0.19174862181406555,
+          "test_ap": 0.21435862788583152,
+          "roc_auc": 0.896213614094173,
+          "brier": 0.012902445132818439,
+          "top_1pct": {
+            "k": 969,
+            "precision": 0.31682146542827655,
+            "recall": 0.21498599439775912
+          },
+          "top_5pct": {
+            "k": 4843,
+            "precision": 0.1614701631220318,
+            "recall": 0.5476190476190477
+          },
+          "threshold": 0.06346077701859909,
+          "operating": {
+            "tp": 719,
+            "fp": 3309,
+            "fn": 709,
+            "tn": 92106,
+            "alerts": 4028,
+            "precision": 0.1785004965243297,
+            "recall": 0.5035014005602241,
+            "fpr": 0.034680081748152805,
+            "alert_rate": 0.04159309397684913
+          },
+          "training_seconds": 13.918840500002261,
+          "estimator_spec": {
+            "class": "lightgbm.sklearn.LGBMClassifier",
+            "parameters": {
+              "boosting_type": "gbdt",
+              "class_weight": "balanced",
+              "colsample_bytree": 1.0,
+              "importance_type": "split",
+              "learning_rate": 0.05,
+              "max_depth": -1,
+              "min_child_samples": 80,
+              "min_child_weight": 0.001,
+              "min_split_gain": 0.0,
+              "n_estimators": 250,
+              "n_jobs": 4,
+              "num_leaves": 15,
+              "objective": null,
+              "random_state": 42,
+              "reg_alpha": 0.0,
+              "reg_lambda": 3,
+              "subsample": 1.0,
+              "subsample_for_bin": 200000,
+              "subsample_freq": 0,
+              "verbosity": -1
+            }
+          }
+        }
+      ],
+      "champion": "LightGBM",
+      "selection": "earlier tune-period AP only",
+      "age_audit": {
+        "groups": [
+          {
+            "group": "age 50+",
+            "n": 12667,
+            "frauds": 418,
+            "legitimate": 12249,
+            "alerts": 1208,
+            "tp": 272,
+            "fp": 936,
+            "recall": 0.6507177033492823,
+            "fpr": 0.07641440117560618,
+            "recall_ci95": [
+              0.6038300963967524,
+              0.6948603176565447
+            ],
+            "fpr_ci95": [
+              0.07184145165082972,
+              0.08125295221663362
+            ],
+            "sufficient_class_counts": true
+          },
+          {
+            "group": "age under 50",
+            "n": 84176,
+            "frauds": 1010,
+            "legitimate": 83166,
+            "alerts": 2999,
+            "tp": 469,
+            "fp": 2530,
+            "recall": 0.4643564356435644,
+            "fpr": 0.030421085539763845,
+            "recall_ci95": [
+              0.4337920144615024,
+              0.4951909647078927
+            ],
+            "fpr_ci95": [
+              0.029275376210206504,
+              0.031610172806114736
+            ],
+            "sufficient_class_counts": true
+          }
+        ],
+        "min_class_count": 30,
+        "recall_gap": 0.18636126770571787,
+        "fpr_gap": 0.04599331563584233,
+        "interpretation": "Descriptive group error rates, not a fairness pass/fail decision. Wilson intervals assume independent records; dependence and label bias can invalidate that assumption. Small groups are retained but excluded from gap summaries."
+      },
+      "ap_uncertainty": {
+        "ci95": null,
+        "clusters": 1,
+        "valid_resamples": 0,
+        "status": "insufficient independent clusters; no interval reported"
+      }
+    }
+  ],
+  "explanation_cases": [
+    {
+      "case_id": "BAF-m5-697548",
+      "test_month": 5,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8868188698984509,
+      "raw_margin": 2.058651299498439,
+      "baseline_margin": -5.61874385328543,
+      "all_contributions_sum": 7.677395152783866,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.3432325817584456
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7515913917560422
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.7113913961942882
+        },
+        {
+          "feature": "device_distinct_emails_8w",
+          "value": "2",
+          "margin_contribution": 0.6594675707206888
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1085815921373174",
+          "margin_contribution": 0.5207034681588333
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.47992453657827994
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m5-745457",
+      "test_month": 5,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8538465640658611,
+      "raw_margin": 1.7650945093536305,
+      "baseline_margin": -5.61874385328543,
+      "all_contributions_sum": 7.383838362639063,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.201294663722425
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7459200547774574
+        },
+        {
+          "feature": "device_distinct_emails_8w",
+          "value": "2",
+          "margin_contribution": 0.6024638953005453
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "239",
+          "margin_contribution": 0.464733354077285
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.4640850177003235
+        },
+        {
+          "feature": "keep_alive_session",
+          "value": "0",
+          "margin_contribution": 0.3997835571495747
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m5-750364",
+      "test_month": 5,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8433172545834061,
+      "raw_margin": 1.6831201960717797,
+      "baseline_margin": -5.61874385328543,
+      "all_contributions_sum": 7.301864049357202,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.3076092385978535
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "321",
+          "margin_contribution": 0.7994577473806761
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.733562136813782
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7063146415066972
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.5671535991426365
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1411079625296699",
+          "margin_contribution": 0.4625420462770649
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m5-717700",
+      "test_month": 5,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8203623139407494,
+      "raw_margin": 1.5188041217939725,
+      "baseline_margin": -5.61874385328543,
+      "all_contributions_sum": 7.137547975079402,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.3181812438258163
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "339",
+          "margin_contribution": 1.0486756993717972
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7200090250411555
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.6096630236843756
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1498671946686345",
+          "margin_contribution": 0.4805407592211786
+        },
+        {
+          "feature": "current_address_months_count",
+          "value": "115",
+          "margin_contribution": 0.4476895652352019
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m5-676005",
+      "test_month": 5,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8049832673585245,
+      "raw_margin": 1.4177361280122647,
+      "baseline_margin": -5.61874385328543,
+      "all_contributions_sum": 7.036479981297694,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.385058801787454
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "314",
+          "margin_contribution": 0.9053120691977539
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.7745319864450904
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.6221146202388333
+        },
+        {
+          "feature": "keep_alive_session",
+          "value": "0",
+          "margin_contribution": 0.5266649616943734
+        },
+        {
+          "feature": "device_os",
+          "value": "macintosh",
+          "margin_contribution": 0.41972663925675235
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m5-692050",
+      "test_month": 5,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7979562083953744,
+      "raw_margin": 1.3735692552189704,
+      "baseline_margin": -5.61874385328543,
+      "all_contributions_sum": 6.992313108504396,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.3389391212089232
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.7764880991137845
+        },
+        {
+          "feature": "device_distinct_emails_8w",
+          "value": "2",
+          "margin_contribution": 0.7668522199708826
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7051426246974966
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1962880276202384",
+          "margin_contribution": 0.4603710324480426
+        },
+        {
+          "feature": "keep_alive_session",
+          "value": "0",
+          "margin_contribution": 0.3988192576417069
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m5-754233",
+      "test_month": 5,
+      "explained_model": "LightGBM",
+      "historical_label": 0,
+      "raw_probability": 0.789201525036851,
+      "raw_margin": 1.3201191244089585,
+      "baseline_margin": -5.61874385328543,
+      "all_contributions_sum": 6.938862977694389,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.2171680226771986
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "1",
+          "margin_contribution": 0.8286135313944301
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7921199656903645
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.0909364939843398",
+          "margin_contribution": 0.5351455489186301
+        },
+        {
+          "feature": "current_address_months_count",
+          "value": "76",
+          "margin_contribution": 0.4878529630820745
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.46506733615661866
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m5-787085",
+      "test_month": 5,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7864659889341339,
+      "raw_margin": 1.3037533555981362,
+      "baseline_margin": -5.61874385328543,
+      "all_contributions_sum": 6.922497208883563,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.4398465239417229
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.9287485591903226
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "322",
+          "margin_contribution": 0.7868758938325959
+        },
+        {
+          "feature": "device_distinct_emails_8w",
+          "value": "2",
+          "margin_contribution": 0.7055215865769764
+        },
+        {
+          "feature": "keep_alive_session",
+          "value": "0",
+          "margin_contribution": 0.4841254088511212
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1509276728733354",
+          "margin_contribution": 0.4728606425210657
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m6-850106",
+      "test_month": 6,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.91687722096349,
+      "raw_margin": 2.400654790951745,
+      "baseline_margin": -5.725793019110876,
+      "all_contributions_sum": 8.12644781006262,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.1442929808008708
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7957782463845208
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.7186470973299907
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "2",
+          "margin_contribution": 0.588339334733277
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "276",
+          "margin_contribution": 0.4956558761610987
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1520865859082911",
+          "margin_contribution": 0.4688851632084089
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m6-843401",
+      "test_month": 6,
+      "explained_model": "LightGBM",
+      "historical_label": 0,
+      "raw_probability": 0.7997711484778369,
+      "raw_margin": 1.3848646523459123,
+      "baseline_margin": -5.725793019110876,
+      "all_contributions_sum": 7.110657671456788,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.2919979199440588
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.835194147527764
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "1",
+          "margin_contribution": 0.8092387939185007
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.0625230895502788",
+          "margin_contribution": 0.5806584518887339
+        },
+        {
+          "feature": "current_address_months_count",
+          "value": "52",
+          "margin_contribution": 0.4271531235279296
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.4256266033565257
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m6-804560",
+      "test_month": 6,
+      "explained_model": "LightGBM",
+      "historical_label": 0,
+      "raw_probability": 0.7976760499801282,
+      "raw_margin": 1.371832436826538,
+      "baseline_margin": -5.725793019110876,
+      "all_contributions_sum": 7.097625455937413,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.214236420062853
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "321",
+          "margin_contribution": 0.6848467933963117
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "2",
+          "margin_contribution": 0.6665662363013027
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.5187725966176548
+        },
+        {
+          "feature": "current_address_months_count",
+          "value": "81",
+          "margin_contribution": 0.5084957283211421
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1647124176438283",
+          "margin_contribution": 0.4714362230195939
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m6-820364",
+      "test_month": 6,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7921906840455277,
+      "raw_margin": 1.3381812165095353,
+      "baseline_margin": -5.725793019110876,
+      "all_contributions_sum": 7.063974235620409,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.1826233141488285
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.8362498495400678
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "2",
+          "margin_contribution": 0.6675497335267426
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.0920546014528138",
+          "margin_contribution": 0.5365237893404772
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "281",
+          "margin_contribution": 0.5220018109079031
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.45155952202074173
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m6-851342",
+      "test_month": 6,
+      "explained_model": "LightGBM",
+      "historical_label": 0,
+      "raw_probability": 0.7830462918394041,
+      "raw_margin": 1.2835078110320708,
+      "baseline_margin": -5.725793019110876,
+      "all_contributions_sum": 7.009300830142943,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.1230329955843932
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.868162956188357
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.8656845196337467
+        },
+        {
+          "feature": "device_distinct_emails_8w",
+          "value": "2",
+          "margin_contribution": 0.7314942529442087
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "1",
+          "margin_contribution": 0.5620030335722763
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "286",
+          "margin_contribution": 0.4889829026421953
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m6-798070",
+      "test_month": 6,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7583737640807766,
+      "raw_margin": 1.1437843040212605,
+      "baseline_margin": -5.725793019110876,
+      "all_contributions_sum": 6.869577323132137,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.1416880219480836
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.8622442957709971
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "331",
+          "margin_contribution": 0.7767505195395277
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.5653700464840005
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1140879592514974",
+          "margin_contribution": 0.5155373519713331
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "3",
+          "margin_contribution": 0.469063144712167
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m6-843982",
+      "test_month": 6,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7488155411945837,
+      "raw_margin": 1.0923051148811456,
+      "baseline_margin": -5.725793019110876,
+      "all_contributions_sum": 6.818098133992021,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.194169368062212
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.8472704546473186
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7972019892278829
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "0",
+          "margin_contribution": 0.713621721454486
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1532162792838592",
+          "margin_contribution": 0.5215790528485387
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.47894310296274684
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m6-902016",
+      "test_month": 6,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7364150771311533,
+      "raw_margin": 1.027418319269514,
+      "baseline_margin": -5.725793019110876,
+      "all_contributions_sum": 6.75321133838039,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.1639358775789337
+        },
+        {
+          "feature": "device_distinct_emails_8w",
+          "value": "2",
+          "margin_contribution": 0.9053507023464166
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "1900.0",
+          "margin_contribution": 0.8912137020787988
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.7447533874373756
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.0931340264623145",
+          "margin_contribution": 0.5015944599103705
+        },
+        {
+          "feature": "keep_alive_session",
+          "value": "0",
+          "margin_contribution": 0.4700948490843702
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m7-985213",
+      "test_month": 7,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8713528257128095,
+      "raw_margin": 1.9129734018721507,
+      "baseline_margin": -5.732679609268176,
+      "all_contributions_sum": 7.645653011140326,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.239488698183297
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.8329938537467543
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "332",
+          "margin_contribution": 0.7761926007267227
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "1",
+          "margin_contribution": 0.7661459321403993
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.0728428857652686",
+          "margin_contribution": 0.6370796223377112
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.5559099173708141
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m7-941971",
+      "test_month": 7,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8249160057591505,
+      "raw_margin": 1.5500157440838171,
+      "baseline_margin": -5.732679609268176,
+      "all_contributions_sum": 7.282695353351993,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.0660253376108493
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.901861562601184
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.8244231855041181
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "1",
+          "margin_contribution": 0.6520111992836471
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.0452381698427012",
+          "margin_contribution": 0.5604303141644635
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.4352904175298374
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m7-938291",
+      "test_month": 7,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8231406078745892,
+      "raw_margin": 1.5377720119450746,
+      "baseline_margin": -5.732679609268176,
+      "all_contributions_sum": 7.270451621213253,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.131213714033901
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.857870967199094
+        },
+        {
+          "feature": "device_distinct_emails_8w",
+          "value": "2",
+          "margin_contribution": 0.7159665904503232
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "272",
+          "margin_contribution": 0.5014023763830684
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1553615560042795",
+          "margin_contribution": 0.4908652333926231
+        },
+        {
+          "feature": "phone_home_valid",
+          "value": "0",
+          "margin_contribution": 0.39570180296032276
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m7-966147",
+      "test_month": 7,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.8087975879916018,
+      "raw_margin": 1.4422160698511697,
+      "baseline_margin": -5.732679609268176,
+      "all_contributions_sum": 7.174895679119348,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.033202363592989
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.874049452453425
+        },
+        {
+          "feature": "device_distinct_emails_8w",
+          "value": "2",
+          "margin_contribution": 0.755204181258806
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "269",
+          "margin_contribution": 0.5060463394863284
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "3",
+          "margin_contribution": 0.4573843742376078
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.4136579737760304
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m7-921898",
+      "test_month": 7,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7930130239600898,
+      "raw_margin": 1.343183771552717,
+      "baseline_margin": -5.732679609268176,
+      "all_contributions_sum": 7.075863380820894,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.0769838968985732
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.9712899888212256
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.8419328043641122
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "314",
+          "margin_contribution": 0.7214635381008344
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "2",
+          "margin_contribution": 0.5419123348037694
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.49459369038538864
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m7-977593",
+      "test_month": 7,
+      "explained_model": "LightGBM",
+      "historical_label": 0,
+      "raw_probability": 0.7873690471257766,
+      "raw_margin": 1.30913902012707,
+      "baseline_margin": -5.732679609268176,
+      "all_contributions_sum": 7.041818629395245,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.1164229703548891
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.8277313351498693
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "354",
+          "margin_contribution": 0.8046472271493875
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.1483229499201795",
+          "margin_contribution": 0.5089032416776241
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "3",
+          "margin_contribution": 0.4645738146830758
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.46018886885197835
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m7-945854",
+      "test_month": 7,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7792600112169618,
+      "raw_margin": 1.2613592782821128,
+      "baseline_margin": -5.732679609268176,
+      "all_contributions_sum": 6.994038887550293,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.0655796381843636
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.965494528794262
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "338",
+          "margin_contribution": 0.9226599643436426
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.8143363024489718
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "1",
+          "margin_contribution": 0.6819187433724644
+        },
+        {
+          "feature": "income",
+          "value": "0.9",
+          "margin_contribution": 0.4460521855674856
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    },
+    {
+      "case_id": "BAF-m7-955398",
+      "test_month": 7,
+      "explained_model": "LightGBM",
+      "historical_label": 1,
+      "raw_probability": 0.7731062704163015,
+      "raw_margin": 1.2259347607871265,
+      "baseline_margin": -5.732679609268176,
+      "all_contributions_sum": 6.9586143700553,
+      "top_contributions": [
+        {
+          "feature": "housing_status",
+          "value": "BA",
+          "margin_contribution": 1.1425268581736994
+        },
+        {
+          "feature": "proposed_credit_limit",
+          "value": "2000.0",
+          "margin_contribution": 0.9758939656951913
+        },
+        {
+          "feature": "device_os",
+          "value": "windows",
+          "margin_contribution": 0.9076416760668065
+        },
+        {
+          "feature": "date_of_birth_distinct_emails_4w",
+          "value": "2",
+          "margin_contribution": 0.49615991253407327
+        },
+        {
+          "feature": "credit_risk_score",
+          "value": "283",
+          "margin_contribution": 0.49282380480722576
+        },
+        {
+          "feature": "name_email_similarity",
+          "value": "0.0985632016964749",
+          "margin_contribution": 0.4789779167322278
+        }
+      ],
+      "interpretation": "Exact TreeSHAP contributions to this named tree model raw margin; not calibrated probabilities, causal reasons, criminal intent or necessarily the fold champion."
+    }
+  ],
+  "temporal_summary": {
+    "test_months": [
+      5,
+      6,
+      7
+    ],
+    "ap_min": 0.17475590064975052,
+    "ap_max": 0.217389280192632,
+    "ap_mean": 0.19336316937683015,
+    "interpretation": "Three forward-period observations, not a confidence interval or independent replications. Training windows overlap."
+  },
+  "financial_outcomes": {
+    "status": "unavailable",
+    "reason": "Observed loss, recovery, review expense, currency and closed-outcome records are required. Transaction exposure is not a substitute.",
+    "currencies": []
+  },
+  "published_comparison": {
+    "comparable": false,
+    "differences": [
+      {
+        "field": "dataset_sha256",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "task",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "population",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "deduplication",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "split_fingerprint",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "feature_manifest_sha256",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "label_policy",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "metric_definition",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "search_budget",
+        "reason": "missing evidence"
+      },
+      {
+        "field": "seed_policy",
+        "reason": "missing evidence"
+      }
+    ],
+    "meaning": "Matching asserted protocol fields only; not independent verification of dataset authenticity or published-score reproduction."
+  },
+  "limits": [
+    "Synthetic account-opening task does not validate real card/UPI or current Indian bank performance.",
+    "Month is the only time resolution. Original entities, label availability and generation provenance remain outside this experiment.",
+    "Age is excluded from prediction, not proof of fairness; other features can act as proxies.",
+    "Age-group Wilson intervals assume independent applications. No demographic fairness claim applies to ULB.",
+    "One test-month cluster per fold is insufficient for dependence-aware AP confidence intervals; no such interval is reported.",
+    "Source precomputed velocities are supplied synthetic features; their original point-in-time production provenance is not independently verified."
+  ],
+  "ulb_dependence_guard": {
+    "ci95": null,
+    "clusters": 1,
+    "valid_resamples": 0,
+    "status": "insufficient independent clusters; no interval reported"
+  },
+  "artifact_notice": "BAF-derived evidence and model artifacts are provided for noncommercial research under CC BY-NC-SA 4.0. This is not licensed current-bank data.",
+  "extension_manifest": {
+    "created_at": "2026-11-06T07:52:23.477651+00:00",
+    "scope": "Current assurance extension source files; historical ULB run.source_hashes refer to its original measured implementation and are intentionally preserved.",
+    "source_sha256": {
+      "fraudshield/__init__.py": "2ecf118f587dd8723fb27a391dedbdcc0184a2014043b17e5756dc29fe145c75",
+      "fraudshield/assurance.py": "3666b304cc5c89e3a7166e8bc6ab9f323831c046d72437c3cd6f9d5c90fde356",
+      "fraudshield/baf.py": "a63d415865cd3aff81c9ccc6d165aa71980bd1d1282484b15495b0546a39e958",
+      "fraudshield/bank_events.py": "8fb9935b78f5a1872447d4f73b31fece7ca28b778ba6200c3392338421746195",
+      "fraudshield/data.py": "97b689bb88f74e537f25cff6fb9e069ad4e69828d15b3871f8a7b7a0816ba9bb",
+      "fraudshield/metrics.py": "7db83979844176f515c965a18cfa8e88ddfa0498eb5c6b5e55fafd289f9606c0",
+      "fraudshield/reviews.py": "df8c653ced2dc4c8074ec353a7fd868b5767f9cff4982772fbbb26a02e2f8e56",
+      "fraudshield/server.py": "5bf45125d13a97b34b79040f1dfc37786a2be0d6e9881acfc3e458ad9658aaf2",
+      "fraudshield/training.py": "7e5acbf2709c42b01f7c3ac5e7471b1367c2f30352de964169eff3469d35ec86",
+      "web/app.js": "3e837d737dd06c9b0f93430de265f2ed87cbfffab0a02e8e38ad673357cf844a",
+      "web/assurance.js": "55ef2340c6fa6bc744a02d8bcf3fa9f35dbc41fda6af6a5ab24565fcf1bd4fe4",
+      "web/index.html": "c7b3afb4a5ec28b77dd37fecf6423e000e920b2b914f33343d55531bc5621304",
+      "web/styles.css": "572b403bf66903191325a1697e2a7cc88acce23e8c5b929538a498e25ce5aabb"
+    },
+    "baf_model_sha256": "c170445f3de7958ed9de6adad6fe75ecb97cf129966b7e624a7f688ddf15b940"
+  }
+}
