@@ -1,0 +1,25 @@
+One extra fraud caught. 437 extra legitimate alerts.
+
+That was the result of a threshold experiment in my FraudShield project. I kept the original threshold.
+
+I built FraudShield to explore a practical question: how much fraud can we catch while keeping legitimate customer interruptions low?
+
+The card study compares eight model families using separate chronological training, tuning, calibration and test periods. Extra Trees was selected on tuning data and achieved 0.7898 average precision on the final test.
+
+At a top-1% review budget, it captured 62 of 74 fraud outcomes: 83.8% recall across 568 reviews. That is a ranking policy, separate from the saved numerical threshold.
+
+Then I examined the customer-friction trade-off. On calibration data:
+
+• 71.4% fraud recall: about 3 legitimate interruptions per 10,000
+• 81.6% recall: about 177 per 10,000
+• 85.7% recall: about 292 per 10,000
+
+The model cannot meet an illustrative target of 80% recall and at most 50 legitimate interruptions per 10,000. Only 49 calibration fraud cases support those estimates.
+
+The dashboard makes that trade-off inspectable. It also keeps a separate synthetic account-opening study, fairness findings and simulated risk tiers clearly labeled.
+
+The card data covers two days in Europe in 2013. This is research evidence, not a claim of current Indian-bank performance or realized savings. Authentication effectiveness and customer satisfaction are still unmeasured.
+
+I wrote up the architecture, experiments and limitations in the project blog. The next step is new forward data with behavioral context and measured challenge outcomes.
+
+#MachineLearning #DataScience #FraudDetection #AppliedML
