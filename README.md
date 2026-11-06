@@ -2,6 +2,8 @@
 
 Read the [project blog](docs/blog.md), [card model card](models/ulb-card/README.md), [synthetic BAF model card](models/baf-account-opening/README.md) and [publication layout](docs/publication.md). This source repository excludes raw data and binary trained models. Obtain compatible model artifacts separately or retrain. The full generated dashboard evidence is in the complete delivery archive; regenerate it with `python run.py train` for a fresh checkout.
 
+Published on LinkedIn: [FraudShield: finding the trade-off between fraud capture and customer friction](https://www.linkedin.com/pulse/fraudshield-finding-trade-off-between-fraud-capture-charan-tej-xu6rf).
+
 An executable card fraud research engine with eight model families, a stakeholder dashboard, local inference, and reproducible reports. Built on real anonymized ULB / Worldline data, with no invented transactions or benchmark scores.
 
 The assurance extension adds a **separate synthetic eight-month BAF account-opening study**, age-group audits, named-feature TreeSHAP examples, label-maturity/bank-data validation, protocol comparison guards, observed financial accounting and a local research review history. It does not convert the 2013 card study into evidence for current Indian payments. See [the eight-limit response](docs/assurance_design.md), [bank data contract](docs/bank_data_contract.md), and [dataset attribution and permissions](DATA_ATTRIBUTION.md).
@@ -28,7 +30,7 @@ The delivery archive includes a ready-to-open `FraudShield_dashboard.html` with 
 - Compare prevalence baseline, logistic regression, random forest, Extra Trees, histogram boosting, isolation forest, LightGBM, and XGBoost.
 - Change the review budget and cost assumptions to see the workload, false alerts, missed cases, and historical exposure.
 - Inspect and export held-out cases. Labels are retrospective outcomes; generated transaction IDs do not identify customers.
-- Inspect precision–recall, ROC and calibration curves, AP uncertainty, feature importance and input distribution shift.
+- Inspect precision-recall, ROC and calibration curves, AP uncertainty, feature importance and input distribution shift.
 - Export the measured report, model metrics, run evidence and an interactive scenario report.
 - Score up to 500 anonymized transactions in the browser through the local API, or score a CSV with the CLI.
 - Open Evidence & safeguards to inspect three measured forward BAF test months, age-group error rates, exact named-model contributions, the limitation response matrix and its printable report.

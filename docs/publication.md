@@ -1,5 +1,13 @@
 # Publication layout
 
+## Publication status, November 6, 2026
+
+- GitHub: https://github.com/charan-143/FraudShield . Private repository; making it public requires owner approval.
+- LinkedIn article: https://www.linkedin.com/pulse/fraudshield-finding-trade-off-between-fraud-capture-charan-tej-xu6rf . Published with an accompanying feed announcement.
+- LinkedIn feed post: https://www.linkedin.com/feed/update/urn:li:ugcPost:7524406982942810112/ .
+- Hugging Face: two upload bundles prepared, covering eight ULB card bundles and the final BAF LightGBM champion. Upload is pending account login; no live model URL is claimed.
+- Verified locally: 52 Python tests and both dashboard logic suites. GitHub-hosted CI has not been verified.
+
 GitHub contains source, tests, research documentation, model cards and measured reports. Raw datasets, local reviews, dependency wheels and private credentials must not be committed. Trained binary models are intended for separately documented Hugging Face repositories.
 
 `models/ulb-card/README.md` documents all eight card bundles; `models/baf-account-opening/README.md` documents the synthetic BAF champion and its separate usage conditions. `artifacts/run.json` and hash manifests identify the original training run. Never load joblib files from an untrusted source.
